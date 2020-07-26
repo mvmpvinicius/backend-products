@@ -6,6 +6,9 @@ use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 
+/**
+ * ProductController
+ */
 class ProductController extends Controller
 {
     /**
@@ -18,7 +21,7 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'description' => 'required|string',
+            'description' => 'required|string'
         ]);
     }
 
@@ -27,7 +30,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showProducts()
+    public function get()
     {
         $user = Auth::user();
 
@@ -38,7 +41,9 @@ class ProductController extends Controller
             $products = Product::where('status', 1)->get();
         }
 
-        return response()->json(['products' => $products], 200);
+        return response()->json([
+            'products' => $products
+        ], 200);
     }
 
     /**
@@ -47,13 +52,16 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function post(Request $request)
     {
         $user = Auth::user();
 
         // Check user's role. It must be SP
-        if ($user->role != 0)
-            return response()->json(['error' => 'Unauthorised'], 401);
+        if ($user->role != 0) {
+            return response()->json([
+                'error' => 'Unauthorised'
+            ], 401);
+        }
         
         // Validate Products's fields
         $this->validator($request);
@@ -61,21 +69,12 @@ class ProductController extends Controller
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
-            'status' => 0,
+            'status' => 0
         ]);
 
-        return response()->json(['product' => $product], 200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
+        return response()->json([
+            'product' => $product
+        ], 200);
     }
 
     /**
@@ -85,28 +84,22 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function put(Request $request, Product $product)
     {
         $user = Auth::user();
 
         // Check user's role. It must be AP
-        if ($user->role != 1)
-            return response()->json(['error'=>'Unauthorised'], 401);
+        if ($user->role != 1) {
+            return response()->json([
+                'error' => 'Unauthorised'
+            ], 401);
+        }
         
         $product->status = 1;
         $product->save();
 
-        return response()->json(['product' => $product], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
-        //
+        return response()->json([
+            'product' => $product
+        ], 200);
     }
 }

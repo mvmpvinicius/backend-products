@@ -14,24 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 // Temporary setup for local testing //
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, Origin, Authorization');
 ///////////////////////////////////////
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::post('login', 'UserController@login');
-Route::post('register', 'UserController@register');
-Route::get('logout', 'UserController@logout');
+Route::post('user/login', 'LoginController@post');
+Route::post('user/register', 'RegisterController@post');
+Route::get('user/logout', 'LogoutController@get');
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::get('product', 'ProductController@showProducts');
-    Route::post('product', 'ProductController@store');
-    Route::put('product/{product}', 'ProductController@update');
-    Route::delete('product/{product}', 'ProductController@destroy');
+    Route::get('product', 'ProductController@get');
+    Route::post('product', 'ProductController@post');
+    Route::put('product/{product}', 'ProductController@put');
 });

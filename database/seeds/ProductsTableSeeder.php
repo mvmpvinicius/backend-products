@@ -21,7 +21,7 @@ class ProductsTableSeeder extends Seeder
             Product::create([
                 'name'        => $faker->sentence,
                 'description' => $faker->paragraph,
-                'status'      => 0,
+                'status'      => 0
             ]);
         }
 
@@ -30,7 +30,7 @@ class ProductsTableSeeder extends Seeder
             Product::create([
                 'name'        => $faker->sentence,
                 'description' => $faker->paragraph,
-                'status'      => 1,
+                'status'      => 1
             ]);
         }
     }

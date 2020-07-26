@@ -17,7 +17,7 @@ class LoginTest extends TestCase
      */
     public function testLoginMissingFields()
     {
-        $this->json('POST', 'api/login')
+        $this->json('POST', 'api/user/login')
             ->assertStatus(422);
     }
     
@@ -34,7 +34,7 @@ class LoginTest extends TestCase
             'password' => 'wrongpassword'
         ];
 
-        $this->json('POST', 'api/login', $payload)
+        $this->json('POST', 'api/user/login', $payload)
             ->assertStatus(401);
     }
     
@@ -56,7 +56,7 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->json('POST', 'api/login', $payload)
+        $this->json('POST', 'api/user/login', $payload)
             ->assertStatus(200);
 
         $user->delete();

@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder
             'name'     => 'admin',
             'email'    => 'admin@admin.com',
             'role'     => 0,
-            'password' => $password,
+            'password' => $password
         ]);
 
         // Generate 10 users with the role 1 - AP
@@ -37,7 +37,7 @@ class UsersTableSeeder extends Seeder
                 'name'     => $faker->name,
                 'email'    => $faker->email,
                 'role'     => 1,
-                'password' => $password,
+                'password' => $password
             ]);
         }
 
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
                 'name'     => $faker->name,
                 'email'    => $faker->email,
                 'role'     => 2,
-                'password' => $password,
+                'password' => $password
             ]);
         }
     }
