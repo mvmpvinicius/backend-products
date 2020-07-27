@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repository\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Validator;
@@ -10,7 +11,22 @@ use Validator;
  * RegisterController
  */
 class RegisterController extends Controller
-{
+{    
+    /**
+     * userRepository
+     */
+    private $userRepository;
+    
+    /**
+     * __construct
+     *
+     * @param  App\Http\Repository\UserRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * User register
      *
@@ -35,7 +51,7 @@ class RegisterController extends Controller
     
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+        $user = $this->userRepository->create($input);
         $token =  $user->createToken('backend')->accessToken;
 
         return response()->json([

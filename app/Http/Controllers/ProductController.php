@@ -2,15 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repository\ProductRepository;
 use App\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 /**
  * ProductController
  */
 class ProductController extends Controller
-{
+{    
+    /**
+     * productRepository
+     */
+    private $productRepository;
+    
+    /**
+     * __construct
+     *
+     * @param  App\Http\Repository\ProductRepository
+     */
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -36,9 +52,9 @@ class ProductController extends Controller
 
         // Check user's role. It must be SP or AP to see all products
         if ($user->role == 0 || $user->role == 1) {
-            $products = Product::all();
+            $products = $this->productRepository->get();
         } else {
-            $products = Product::where('status', 1)->get();
+            $products = $this->productRepository->getByStatus(1);
         }
 
         return response()->json([
@@ -66,7 +82,8 @@ class ProductController extends Controller
         // Validate Products's fields
         $this->validator($request);
 
-        $product = Product::create([
+        // Insert a new product after checks
+        $product = $this->productRepository->create([
             'name' => $request->name,
             'description' => $request->description,
             'status' => 0
@@ -94,10 +111,10 @@ class ProductController extends Controller
                 'error' => 'Unauthorised'
             ], 401);
         }
-        
-        $product->status = 1;
-        $product->save();
 
+        // Approve product after checks
+        $this->productRepository->approve($product);
+        
         return response()->json([
             'product' => $product
         ], 200);
